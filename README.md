@@ -2,7 +2,7 @@
 
 ## **About**
 
-GoneFishing is a simple fishing game made for my dad's birthday. It is also open source for anyone to play. It is written in C++ and SDL2.
+Gone Fishing is a simple fishing game made for my dad's birthday. It is also open source for anyone to play. It is written in C++ and SDL2.
 
 ## **Running**
 
@@ -20,11 +20,11 @@ Not there yet. (maybe in 1.0.0 stable)
 
 ## **Building From Source**
 
-Again with the running, Windows is only supported right now, but in 1.0.0 stable, you can build on MacOS and Linux.
+Again with running, Windows is only supported right now, but in 1.0.0 stable, you can build on MacOS and Linux.
 
 ### **Windows**
 
-You will need [Mingw32](https://www.mingw-w64.org/downloads/) installed. Then, navigate to a directory where you want the game to go. After that, type in the following commands:
+You will need [Mingw](https://www.mingw-w64.org/downloads/) installed. Then, navigate to a directory where you want the game to go. After that, type in the following commands:
 
 - `git clone https://github.com/srevrtt/gone-fishing.git`
 - `cd gone-fishing`
