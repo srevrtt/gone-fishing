@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include <Windows.h>
 #include <filesystem>
 #include <fstream>
 
@@ -15,14 +14,18 @@ bool Updater::check()
     const std::string currentVersion = "1.0.0-rc.2";
 
     // command to recieve latest version
-    WinExec("curl -o data.txt https://raw.githubusercontent.com/srevrtt/gone-fishing/master/version.txt", SW_HIDE);
+    system("curl -o data.txt https://raw.githubusercontent.com/srevrtt/gone-fishing/master/version.txt");
 
     // convert the version file into a string
     std::ifstream data("data.txt");
-    std::string line;
+    std::string line, content;
 
-    std::getline(data, line);
-    txt = line;
+    while (std::getline(data, line))
+    {
+        content += line;
+    }
+
+    txt = content;
 
     // if the release on the user's machine is not the latest version
     if (txt != currentVersion)

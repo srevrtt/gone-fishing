@@ -11,7 +11,7 @@ all: build clean run
 
 build:
 	${CC} -c ./src/*.cpp ${ARGS} ${INCDIR}
-	${CC} -std=c++17 -static-libgcc -static-libstdc++ *.o -o ${BINDIR} -lws2_32 ${LIBDIR} ${LIBS}
+	${CC} -mwindows -static-libgcc -static-libstdc++ *.o -o ${BINDIR} ${LIBDIR} ${LIBS}
 
 clean:
 	del *.o

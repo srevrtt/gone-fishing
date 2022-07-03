@@ -35,12 +35,14 @@ int fishCount = 10;
 // variables for updating
 bool finishedUpdating = false;
 bool finishedDownloading = false;
+bool update = false;
 
 // function to run on a seperate thread
 int updateCheckThread(void *data)
 {
     if (Updater::check() == true) // if we want to update
     {
+        update = true;
         Updater::update(finishedUpdating, finishedDownloading); // update
     }
 
@@ -141,7 +143,7 @@ int main(int argc, char **args)
         }
 
         // if we are still downloading
-        if (!finishedDownloading)
+        if (!finishedDownloading && update == true)
         {
             Window::drawFontRaw(font, "Downloading... Wait", (1280 / 2) - 105, 23, 0, 0, 0);
             Window::drawFontRaw(font, "Downloading... Wait", (1280 / 2) - 105, 20, 255, 255, 255);
