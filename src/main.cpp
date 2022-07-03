@@ -40,17 +40,17 @@ bool update = false;
 // function to run on a seperate thread
 int updateCheckThread(void *data)
 {
-    if (Updater::check() == true) // if we want to update
-    {
-        update = true;
-        Updater::update(finishedUpdating, finishedDownloading); // update
-    }
-
+    Updater::update(finishedUpdating, finishedDownloading); // update
     return 0;
 }
 
 int main(int argc, char **args)
 {
+    if (Updater::check() == true) // if we want to update
+    {
+        update = true;
+    }
+
     Window::create(1280, 720, "Gone Fishing v1.0.0-rc.1");
     std::vector<SDL_Texture *> otherTextures;
 
@@ -70,7 +70,12 @@ int main(int argc, char **args)
 
     // create the thread
     bool updateCheck = false;
-    SDL_Thread *threadID = SDL_CreateThread(updateCheckThread, "UpdateThread", (void *)updateCheck);
+    SDL_Thread *threadID;
+
+    if (update)
+    {
+        threadID = SDL_CreateThread(updateCheckThread, "UpdateThread", (void *)updateCheck);
+    }
 
     // game loop
     while (true)

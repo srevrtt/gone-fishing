@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <Windows.h>
 #include <fstream>
 
 #include "include/updater.hpp"
@@ -11,10 +12,10 @@ std::string txt;
 // update checker
 bool Updater::check()
 {
-    const std::string currentVersion = "1.0.0-rc.2";
+    const std::string currentVersion = "1.0.0rc.2";
 
     // command to recieve latest version
-    system("curl -o data.txt https://raw.githubusercontent.com/srevrtt/gone-fishing/master/version.txt");
+    WinExec("curl -o data.txt https://raw.githubusercontent.com/srevrtt/gone-fishing/master/version.txt", SW_HIDE);
 
     // convert the version file into a string
     std::ifstream data("data.txt");
@@ -26,6 +27,7 @@ bool Updater::check()
     }
 
     txt = content;
+    std::remove("data.txt");
 
     // if the release on the user's machine is not the latest version
     if (txt != currentVersion)
@@ -48,20 +50,19 @@ void Updater::update(bool &finishedUpdating, bool &finishedDownloading)
     std::filesystem::create_directory("UpgradedVersion");
 
     // execute the file
-    system(cmd.c_str());
+    WinExec(cmd.c_str(), SW_HIDE);
     finishedDownloading = true; // alert main.cpp that we finished downloading
 
     // rename the extracted file
     std::string renameCmd = "cd UpgradedVersion && rename GoneFishing_" + txt + " gone_fishing";
 
-    system("cd UpgradedVersion && tar zxf gone_fishing.tar.gz");         // extract
-    system(renameCmd.c_str());                                           // rename
-    system("cd UpgradedVersion/gone_fishing && copy \"*.*\" ..");        // copy dlls and exe into the "UpgradedVersion" dir
-    system("cd UpgradedVersion/gone_fishing && robocopy res ../res /e"); // copy "res" folder into the "UpgradedVersion" dir
+    WinExec("cd UpgradedVersion && tar zxf gone_fishing.tar.gz", SW_HIDE);         // extract
+    WinExec(renameCmd.c_str(), SW_HIDE);                                           // rename
+    WinExec("cd UpgradedVersion/gone_fishing && copy \"*.*\" ..", SW_HIDE);        // copy dlls and exe into the "UpgradedVersion" dir
+    WinExec("cd UpgradedVersion/gone_fishing && robocopy res ../res /e", SW_HIDE); // copy "res" folder into the "UpgradedVersion" dir
 
     // cleanup
-    system("cd UpgradedVersion && rd /S /Q gone_fishing && del gone_fishing.tar.gz");
-    std::remove("data.txt");
+    WinExec("cd UpgradedVersion && rd /S /Q gone_fishing && del gone_fishing.tar.gz", SW_HIDE);
 
     finishedUpdating = true; // alert main.cpp that upgrading is finished
 }
