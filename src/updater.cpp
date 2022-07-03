@@ -12,7 +12,7 @@ std::string txt;
 // update checker
 bool Updater::check()
 {
-    const std::string currentVersion = "1.0.0rc.2";
+    const std::string currentVersion = "1.0.0-rc.2";
 
     // command to recieve latest version
     WinExec("curl -o data.txt https://raw.githubusercontent.com/srevrtt/gone-fishing/master/version.txt", SW_HIDE);
