@@ -44,6 +44,10 @@ To catch a fish, move your mouse over to the fish and click it. Then, drag your 
 
 - The first version of Gone Fishing.
 
+### **v1.0.0-rc.2**
+
+- Added an auto updater.
+
 ## **Attribution**
 
 The original game idea was based off of PolyMars's TeamSeas game.
