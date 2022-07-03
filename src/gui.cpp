@@ -4,6 +4,7 @@
 #include <string>
 
 #include <sdl2/include/SDL.h>
+#include <sdl2/include/SDL_ttf.h>
 
 #include "include/gui.hpp"
 #include "include/button.hpp"
@@ -28,6 +29,8 @@ SDL_Texture *titleEffect;
 // "you won" text with the same effect as the buttons (for the end screen)
 SDL_Texture *youWon;
 SDL_Texture *youWonEffect;
+
+TTF_Font *scoreText;
 
 // initiate everything after the SDL2 context has been created
 void Gui::init()

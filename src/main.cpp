@@ -9,6 +9,7 @@
 #include "include/button.hpp"
 #include "include/gui.hpp"
 #include "include/fishManager.hpp"
+#include "include/updater.hpp"
 
 SDL_Event event; // window events (mouse, keyboard, etc.)
 
@@ -31,6 +32,21 @@ int state = 1;
 
 int fishCount = 10;
 
+// variables for updating
+bool finishedUpdating = false;
+bool finishedDownloading = false;
+
+// function to run on a seperate thread
+int updateCheckThread(void *data)
+{
+    if (Updater::check() == true) // if we want to update
+    {
+        Updater::update(finishedUpdating, finishedDownloading); // update
+    }
+
+    return 0;
+}
+
 int main(int argc, char **args)
 {
     Window::create(1280, 720, "Gone Fishing v1.0.0-rc.1");
@@ -50,6 +66,10 @@ int main(int argc, char **args)
 
     NOW = SDL_GetPerformanceCounter();
 
+    // create the thread
+    bool updateCheck = false;
+    SDL_Thread *threadID = SDL_CreateThread(updateCheckThread, "UpdateThread", (void *)updateCheck);
+
     // game loop
     while (true)
     {
@@ -65,6 +85,7 @@ int main(int argc, char **args)
         SDL_PollEvent(&event);
         if (event.type == SDL_QUIT) // when the user closes the window
         {
+            SDL_DetachThread(threadID);
             break;
         }
 
@@ -110,6 +131,20 @@ int main(int argc, char **args)
             {
                 break;
             }
+        }
+
+        // if we are finished downloading but still upgrading
+        if (!finishedUpdating && finishedDownloading)
+        {
+            Window::drawFontRaw(font, "Updating... Wait", (1280 / 2) - 85, 23, 0, 0, 0);
+            Window::drawFontRaw(font, "Updating... Wait", (1280 / 2) - 85, 20, 255, 255, 255);
+        }
+
+        // if we are still downloading
+        if (!finishedDownloading)
+        {
+            Window::drawFontRaw(font, "Downloading... Wait", (1280 / 2) - 105, 23, 0, 0, 0);
+            Window::drawFontRaw(font, "Downloading... Wait", (1280 / 2) - 105, 20, 255, 255, 255);
         }
 
         // increment the timer
@@ -168,6 +203,7 @@ int main(int argc, char **args)
     }
 
     // once we're done, close the window
+    SDL_WaitThread(threadID, NULL);
     Window::close();
 
     return 0;
